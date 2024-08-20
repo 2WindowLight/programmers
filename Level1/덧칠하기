@@ -1,0 +1,39 @@
+import java.io.*;
+import java.util.*;
+// n 은 한 벽면애 몇개의 구역이 있는지의 개수 - 즉 n이 8이면 1층부터 8층 까지 있는 셈이다.
+// m 은 룰러의 길이 - 즉 m이 3이면 1층-3층 or 2층-5층 까지 덮을 수 있다
+// section 은 페인트가 안칠해져 있는 벽면 층 - 2,3,5 이면 그 층들이 비어있고 m이 3이면 2,3,5 층을 1번에 채울 수 있음
+// 위의 결과로 answer 은 1이다.
+// 방법? hashmap? 그냥 배열에 boolean을 써서 구분?
+// boolean값으로 값을? => 해당 상황에 따라 HashMap이 효율적인지 판단하고 쓰는게 좋을지 판단
+//HashMap<String, Boolean> map4 = new HashMap<String, Boolean>();
+class Solution {
+    public int solution(int n, int m, int[] section) {
+        HashMap<Integer, Boolean> map = new HashMap<Integer, Boolean>();
+        // 1층부터 n 층 까지 칠한다.
+        for(int i = 1; i < n + 1; i++){
+            // 칠해져 있는 부분은 true & 칠해져 있지 않은 부분은 false 로 한다.
+            // 모두 칠해져 있는 것으로 하고 section 번호를 get 하여 그 부분을 false로 한다
+            map.put(i,true);
+        } 
+        for(int j = 0; j < section.length; j++){
+                    map.put(section[j], false);
+            }
+         
+        int answer = overCoat(m,map);
+        return answer;
+    }
+    public int overCoat(int m, HashMap map){
+        int firstNum = 1;
+        int answer = 0;
+        while (firstNum <= map.size()){
+            // 해당 맵의 키값이 false 이면, 덧칠 횟수 추가
+            // 그리고, 덧칠한 길이 만큼 i에 더하고, 그 해당 i 값 부터 false 인지 아닌지 while 문 진행
+            if (map.get(firstNum).equals(false)){ 
+                answer++;
+                firstNum += m;
+            }else firstNum++; 
+        }
+        return answer;
+    }
+}
